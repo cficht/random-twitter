@@ -77,4 +77,24 @@ describe('app routes', () => {
       });
   });
 
+  it('updates a tweets text', () => {
+    return Tweet.create({
+      handle: 'Chris', 
+      text: 'Awesome stuff!'
+    })
+      .then(tweet => {
+        return request(app)
+          .patch(`/api/v1/tweets/${tweet.id}`)
+          .send({ text: 'Not so awesome stuff!' });
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          handle: 'Chris', 
+          text: 'Not so awesome stuff!',
+          __v: 0
+        });
+      });
+  });
+
 });
