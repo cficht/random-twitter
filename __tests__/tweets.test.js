@@ -34,4 +34,47 @@ describe('app routes', () => {
       });
   });
 
+  it('gets all tweets', () => {
+    const tweets = [
+      { handle: 'Chris', text: 'Awesome stuff!' },
+      { handle: 'Frank', text: 'Awesomer stuff!' }
+    ];
+
+    return Tweet.create(tweets)
+      .then(() => {
+        return request(app)
+          .get('/api/v1/tweets');
+      })
+      .then(res => {
+        expect(res.body).toHaveLength(2);
+
+        tweets.forEach(tweet => {
+          expect(res.body).toContainEqual({
+            _id: expect.any(String),
+            ...tweet,
+            __v: 0
+          });
+        });
+      });
+  });
+
+  it('gets tweet by id', () => {
+    return Tweet.create({
+      handle: 'Chris', 
+      text: 'Awesome stuff!'
+    })
+      .then(tweet => {
+        return request(app)
+          .get(`/api/v1/tweets/${tweet.id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          handle: 'Chris', 
+          text: 'Awesome stuff!',
+          __v: 0
+        });
+      });
+  });
+
 });
