@@ -29,7 +29,7 @@ describe('app routes', () => {
       .then(tweet => {
         return request(app)
           .post('/api/v1/comments')
-          .send({ comment: 'lol', tweet: tweet._id })
+          .send({ comment: 'lol', tweet: tweet._id });
       })
       .then(res => {
         expect(res.body).toEqual({
