@@ -41,4 +41,34 @@ describe('app routes', () => {
       });
   });
 
+  it('gets a comment by id', () => {
+    return Tweet.create({ 
+      handle: 'Chris', 
+      text: 'Awesome stuff!' 
+    })
+      .then(tweet => {
+        return Comment.create({
+          comment: 'lol',
+          tweet: tweet._id
+        })
+          .then(comment => {
+            return request(app)
+              .get(`/api/v1/comments/${comment.id}`);
+          })
+          .then(res => {
+            expect(res.body).toEqual({
+              _id: expect.any(String),
+              comment: 'lol',
+              tweet: {
+                _id: expect.any(String),
+                handle: 'Chris',
+                text: 'Awesome stuff!',
+                __v: 0
+              },
+              __v: 0
+            });
+          });
+      });
+  });
+
 });
