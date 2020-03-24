@@ -97,4 +97,23 @@ describe('app routes', () => {
       });
   });
 
+  it('deletes a tweet', () => {
+    return Tweet.create({
+      handle: 'Chris', 
+      text: 'Awesome stuff!'
+    })
+      .then(tweet => {
+        return request(app)
+          .delete(`/api/v1/tweets/${tweet.id}`);
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          handle: 'Chris', 
+          text: 'Awesome stuff!',
+          __v: 0
+        });
+      });
+  });
+
 });
