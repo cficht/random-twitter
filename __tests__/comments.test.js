@@ -42,9 +42,9 @@ describe('app routes', () => {
   });
 
   it('gets a comment by id', () => {
-    return Tweet.create({ 
-      handle: 'Chris', 
-      text: 'Awesome stuff!' 
+    return Tweet.create({
+      handle: 'Chris',
+      text: 'Awesome stuff!'
     })
       .then(tweet => {
         return Comment.create({
@@ -72,9 +72,9 @@ describe('app routes', () => {
   });
 
   it('updates a comment by id', () => {
-    return Tweet.create({ 
-      handle: 'Chris', 
-      text: 'Awesome stuff!' 
+    return Tweet.create({
+      handle: 'Chris',
+      text: 'Awesome stuff!'
     })
       .then(tweet => {
         return Comment.create({
@@ -98,9 +98,9 @@ describe('app routes', () => {
   });
 
   it('deletes a comment by id', () => {
-    return Tweet.create({ 
-      handle: 'Chris', 
-      text: 'Awesome stuff!' 
+    return Tweet.create({
+      handle: 'Chris',
+      text: 'Awesome stuff!'
     })
       .then(tweet => {
         return Comment.create({

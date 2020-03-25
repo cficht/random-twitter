@@ -5,6 +5,7 @@ const app = require('../lib/app');
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Tweet = require('../lib/models/Tweet');
+const Comment = require('../lib/models/Comment');
 
 
 describe('app routes', () => {
@@ -27,7 +28,7 @@ describe('app routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          handle: 'Chris', 
+          handle: 'Chris',
           text: 'Awesome stuff!',
           __v: 0
         });
@@ -60,26 +61,39 @@ describe('app routes', () => {
 
   it('gets tweet by id', () => {
     return Tweet.create({
-      handle: 'Chris', 
+      handle: 'Chris',
       text: 'Awesome stuff!'
     })
       .then(tweet => {
+        return Comment.create({
+          comment: 'lol',
+          tweet: tweet._id
+        });
+      })
+      .then(tweet => {
         return request(app)
-          .get(`/api/v1/tweets/${tweet.id}`);
+          .get(`/api/v1/tweets/${tweet.tweet}`);
       })
       .then(res => {
-        expect(res.body).toEqual({
-          _id: expect.any(String),
-          handle: 'Chris', 
-          text: 'Awesome stuff!',
-          __v: 0
-        });
+        expect(res.body).toEqual(
+          [{
+            _id: expect.any(String),
+            handle: 'Chris',
+            text: 'Awesome stuff!',
+            __v: 0
+          }, [{
+            _id: expect.any(String),
+            comment: 'lol',
+            tweet: expect.any(String),
+            __v: 0
+          }]]
+        );
       });
   });
 
   it('updates a tweets text', () => {
     return Tweet.create({
-      handle: 'Chris', 
+      handle: 'Chris',
       text: 'Awesome stuff!'
     })
       .then(tweet => {
@@ -90,7 +104,7 @@ describe('app routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          handle: 'Chris', 
+          handle: 'Chris',
           text: 'Not so awesome stuff!',
           __v: 0
         });
@@ -99,7 +113,7 @@ describe('app routes', () => {
 
   it('deletes a tweet', () => {
     return Tweet.create({
-      handle: 'Chris', 
+      handle: 'Chris',
       text: 'Awesome stuff!'
     })
       .then(tweet => {
@@ -109,7 +123,7 @@ describe('app routes', () => {
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),
-          handle: 'Chris', 
+          handle: 'Chris',
           text: 'Awesome stuff!',
           __v: 0
         });
